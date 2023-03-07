@@ -1,18 +1,22 @@
 <template>
   <div id="app-container">
-    <micro-app name='appname-sidebar' :url='url' :data='sidebarData'></micro-app>
-    <router-view id='router-container' />
+    <micro-app
+      name="appname-sidebar"
+      :url="url"
+      :data="sidebarData"
+    ></micro-app>
+    <router-view id="router-container" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import microApp, { getActiveApps } from '@micro-zoe/micro-app'
-import config from './config'
+import { defineComponent } from "vue";
+import microApp, { getActiveApps } from "@micro-zoe/micro-app";
+import config from "./config";
 
 export default defineComponent({
-  name: 'App',
-  data () {
+  name: "App",
+  data() {
     return {
       url: `${config.sidebar}/child/sidebar/`,
       // 👇 主应用向sidebar子应用下发一个名为pushState的方法
@@ -25,29 +29,33 @@ export default defineComponent({
            *
            * getActiveApps: 用于获取正在运行的子应用
            */
+          console.warn("appName", !getActiveApps().includes(appName), appName);
           if (!getActiveApps().includes(appName)) {
             // child-vite 和 child-react17子应用为hash路由，这里拼接一下hash值
-            hash && (path += `/#${hash}`)
+            hash && (path += `/#${hash}`);
             // 主应用跳转
-            this.$router.push(path)
+            console.info("path", path, appName);
+            this.$router.push(path);
           } else {
-            let childPath = null
+            let childPath = null;
             // child-vite 和 child-react17子应用是hash路由，hash值就是它的页面地址，这里单独处理
             if (hash) {
-              childPath = hash
+              childPath = hash;
             } else {
               // path的值形式如：/app-vue2/page2，这里/app-vue2是子应用的基础路由，/page2才是页面地址，所以我们需要将/app-vue2部分删除
-              childPath = path.replace(/^\/app-[^/]+/, '')
-              !childPath && (childPath = '/') // 防止地址为空
+              // 这里需要约定一个前缀。如下面正则的app-
+              childPath = path.replace(/^\/app-[^/]+/, "");
+              !childPath && (childPath = "/"); // 防止地址为空
             }
+            console.info("appName", appName, childPath);
             // 主应用通过下发data数据控制子应用跳转
-            microApp.setData(appName, { path: childPath })
+            microApp.setData(appName, { path: childPath });
           }
         },
       },
-    }
+    };
   },
-} as any)
+} as any);
 </script>
 
 <style>

@@ -15,6 +15,11 @@ const routes = [
     name: 'page2',
     component: () => import(/* webpackChunkName: "page2" */ './pages/page2.vue'),
   },
+  {
+    path: '/about',
+    name: 'about',
+    component: () => import(/* webpackChunkName: "about" */ './pages/about.vue'),
+  },
 ];
 
 export default routes;

@@ -10,6 +10,7 @@ const config: Record<string, string> = {
   vite: 'http://localhost:4007',
   vue2: 'http://localhost:4008',
   vue3: 'http://localhost:4009',
+  rmgs: 'http://localhost:8080',
 }
 
 // 线上环境地址

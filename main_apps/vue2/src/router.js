@@ -52,6 +52,11 @@ const routes = [
     name: 'app-vue3',
     component: () => import(/* webpackChunkName: "vue3" */ './pages/vue3.vue'),
   },
+  {
+    path: '/rmgs-vue2*',
+    name: 'rmgs-vue2',
+    component: () => import(/* webpackChunkName: "vue3" */ './pages/rmgs.vue'),
+  },
 ];
 
 export default routes;

@@ -51,6 +51,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'app-vue3',
     component: () => import(/* webpackChunkName: "vue3" */ '../views/vue3.vue'),
   },
+  {
+    path: '/app-rmgs/:page*',
+    name: 'rmgs',
+    component: () => import(/* webpackChunkName: "rmgs" */ '../views/rmgs.vue'),
+  },
 ]
 
 const router = createRouter({
