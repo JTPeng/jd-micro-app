@@ -82,11 +82,11 @@
 <script setup>
 import { onMounted } from "vue";
 import { $ref } from "vue/macros";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 import { Document, Menu as IconMenu, Location } from "@element-plus/icons-vue";
 const emits = defineEmits(["selectMenu"]);
 let activeIndex = $ref("/");
-const router = useRouter()
+const router = useRouter();
 onMounted(() => {
   getActiveIndex();
   // 监听浏览器前进后退按钮，激活对应菜单
@@ -99,10 +99,10 @@ onMounted(() => {
   //   console.info("onMounted", microAppData);
   //   // 全局数据监听，监听来自其它子应用页面跳转，控制侧边栏的菜单展示
   //   // 因为子应用之间无法直接通信，这里采用全局数据通信
-  //   window.microApp.addGlobalDataListener((data) => {
-  //     console.log("全局数据:", data);
-  //     this.getActiveIndex();
-  //   });
+  window.microApp.addGlobalDataListener((data) => {
+    console.log("全局数据:", data);
+    getActiveIndex();
+  });
   // }
 });
 const selectMenu = (index, indexPath) => {
