@@ -76,9 +76,7 @@
     "url": "https://github.com/micro-zoe/micro-app-demo/issues"
   },
   "homepage": "https://github.com/micro-zoe/micro-app-demo#readme",
-  "dependencies": {
-    "@micro-zoe/micro-app": "latest"
-  },
+  "dependencies": {},
   "devDependencies": {
     "cross-env": "~7.0.3",
     "express": "~4.17.1",
