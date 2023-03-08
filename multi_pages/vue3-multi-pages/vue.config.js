@@ -1,5 +1,4 @@
-const { defineConfig } = require("@vue/cli-service");
-module.exports = defineConfig({
+module.exports = {
   pages: {
     sidebar: {
       entry: "src/module/sidebar/main.js",
@@ -12,5 +11,28 @@ module.exports = defineConfig({
       filename: "main.html",
     },
   },
-  transpileDependencies: true,
-});
+  lintOnSave: false,
+  // 自定义webpack配置
+  configureWebpack: {
+    output: {
+      chunkLoadingGlobal: `webpackJsonp-main-vue3`,
+    },
+  },
+  chainWebpack: (config) => {
+    // config.resolve.alias.set("@micro-zoe/micro-app", path.join(__dirname, '../../../micro-app/lib/index.esm.js'))
+
+    config.module
+      .rule("vue")
+      .use("vue-loader")
+      .tap((options) => {
+        options.compilerOptions = {
+          ...(options.compilerOptions || {}),
+          isCustomElement: (tag) => /^micro-app/.test(tag),
+        };
+        return {
+          ...options,
+          reactivityTransform: true,
+        };
+      });
+  },
+};

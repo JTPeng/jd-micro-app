@@ -1,34 +1,83 @@
 <template>
-  <img alt="Vue logo" src="../../assets/logo.png" />
-  <p>
-    <!--使用 router-link 组件进行导航 -->
-    <!--通过传递 `to` 来指定链接 -->
-    <!--`<router-link>` 将呈现一个带有正确 `href` 属性的 `<a>` 标签-->
-    <router-link to="/home"> Home</router-link> |
-    <router-link to="/about">Go to About</router-link>
-  </p>
-  <HelloWorld msg="Welcome to Your Vue.js App" />
-  <router-view></router-view>
+  <div id="app-container">
+    <micro-app
+      name="appname-sidebar"
+      :url="url"
+      :data="sidebarData"
+    ></micro-app>
+    <router-view id="router-container" />
+  </div>
 </template>
 
 <script>
-import HelloWorld from "../../components/HelloWorld.vue";
+import { defineComponent } from "vue";
+import microApp, { getActiveApps } from "@micro-zoe/micro-app";
+import config from "./config";
 
-export default {
+export default defineComponent({
   name: "App",
-  components: {
-    HelloWorld,
+  data() {
+    return {
+      url: `${config["multi-sidebar"]}`,
+      // 👇 主应用向sidebar子应用下发一个名为pushState的方法
+      sidebarData: {
+        // 子应用sidebar通过pushState控制主应用跳转
+        pushState: (appName, path, hash) => {
+          /**
+           * 当子应用还未渲染，通过基座控制路由跳转，子应用在初始化时会自己根据url渲染对应的页面
+           * 当子应用已经渲染，则直接控制子应用进行内部跳转
+           *
+           * getActiveApps: 用于获取正在运行的子应用
+           */
+          console.warn("appName", !getActiveApps().includes(appName), appName);
+          if (!getActiveApps().includes(appName)) {
+            // child-vite 和 child-react17子应用为hash路由，这里拼接一下hash值
+            hash && (path += `/#${hash}`);
+            // 主应用跳转
+            console.info("path", path, appName);
+            this.$router.push(path);
+          } else {
+            let childPath = null;
+            // child-vite 和 child-react17子应用是hash路由，hash值就是它的页面地址，这里单独处理
+            if (hash) {
+              childPath = hash;
+            } else {
+              // path的值形式如：/app-vue2/page2，这里/app-vue2是子应用的基础路由，/page2才是页面地址，所以我们需要将/app-vue2部分删除
+              // 这里需要约定一个前缀。如下面正则的app-
+              childPath = path.replace(/^\/app-[^/]+/, "");
+              !childPath && (childPath = "/"); // 防止地址为空
+            }
+            console.info("appName", appName, childPath);
+            // 主应用通过下发data数据控制子应用跳转
+            microApp.setData(appName, { path: childPath });
+          }
+        },
+      },
+    };
   },
-};
+});
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+#app-container {
+  font-family: Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+#router-container {
+  flex: 1;
+}
+#public-links {
+  padding: 10px 0;
+}
+#public-links a {
+  text-decoration: underline;
+  color: -webkit-link;
+  cursor: pointer;
+}
+#public-links a:active {
+  color: #f53f3f;
 }
 </style>
