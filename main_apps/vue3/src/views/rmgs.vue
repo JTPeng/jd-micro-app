@@ -23,7 +23,8 @@ export default {
   name: 'rmgs',
   data () {
     return {
-      url: `${config.rmgs}/home`,
+      url: `${config.rmgs}`,
+      // url: `${config.rmgsTest}`,
       microAppData: {msg: '来自基座的数据'}
     }
   },
