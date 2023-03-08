@@ -18,7 +18,8 @@ export default defineComponent({
   name: "App",
   data() {
     return {
-      url: `${config['sidebar-vue3']}/child/sidebar-vue3/`,
+      url: `${config["sidebar-vue3"]}/child/sidebar-vue3/`,
+      // url: `${config["sidebar"]}/child/sidebar-vue3/`,
       // 👇 主应用向sidebar子应用下发一个名为pushState的方法
       sidebarData: {
         // 子应用sidebar通过pushState控制主应用跳转
@@ -64,20 +65,8 @@ export default defineComponent({
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
-  text-align: center;
 }
 #router-container {
   flex: 1;
-}
-#public-links {
-  padding: 10px 0;
-}
-#public-links a {
-  text-decoration: underline;
-  color: -webkit-link;
-  cursor: pointer;
-}
-#public-links a:active {
-  color: #f53f3f;
 }
 </style>

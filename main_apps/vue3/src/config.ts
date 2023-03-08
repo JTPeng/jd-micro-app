@@ -12,6 +12,7 @@ const config: Record<string, string> = {
   vue2: 'http://localhost:4008',
   vue3: 'http://localhost:4009',
   rmgs: 'http://localhost:8080',
+  rmgsTest: 'https://rmgs-test.mijiaoyu.cn/',
 }
 
 // 线上环境地址

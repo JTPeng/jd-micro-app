@@ -6,7 +6,13 @@
       :default-active="activeIndex"
       @select="selectMenu"
     >
-      <el-sub-menu index="\">
+      <el-menu-item index="/">
+        <template #title>
+          <el-icon><IconMenu /></el-icon>
+          <span>首页</span>
+        </template>
+      </el-menu-item>
+      <el-sub-menu index="app-rmgs">
         <template #title>
           <el-icon><location /></el-icon>
           <span>学生管理</span>
@@ -19,6 +25,9 @@
         </el-menu-item>
         <el-menu-item index="/app-rmgs/students/returnPremium">
           <span class="menu-item-text">退费详情</span>
+        </el-menu-item>
+        <el-menu-item index="/app-rmgs/testPage">
+          <span class="menu-item-text">testPage</span>
         </el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="appname-vue2">
@@ -65,20 +74,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
+import { $ref } from "vue/macros";
 import { Document, Menu as IconMenu, Location } from "@element-plus/icons-vue";
-let activeIndex = ref("/");
-let microAppData = ref(null);
+let activeIndex = $ref("/");
+let microAppData = $ref(null);
 onMounted(() => {
   getActiveIndex();
   // 监听浏览器前进后退按钮，激活对应菜单
   window.addEventListener("popstate", () => this.getActiveIndex());
-
+  console.info("onMounted", window.__MICRO_APP_ENVIRONMENT__);
   // 判断微前端环境
   if (window.__MICRO_APP_ENVIRONMENT__) {
     // 获取基座下发的数据
     microAppData = window.microApp.getData();
-
+    console.info("onMounted", microAppData);
     // 全局数据监听，监听来自其它子应用页面跳转，控制侧边栏的菜单展示
     // 因为子应用之间无法直接通信，这里采用全局数据通信
     window.microApp.addGlobalDataListener((data) => {
@@ -89,7 +99,7 @@ onMounted(() => {
 });
 const selectMenu = (index, indexPath) => {
   console.info("selectMenu", index, indexPath);
-  if (microAppData.value) {
+  if (microAppData) {
     // 因为 child-vite 和 child-react17 子应用是hash路由，所以需要传递hash值
     let hash = null;
     if (index === "/app-vite/page2" || index === "/app-react17/page2") {
@@ -109,26 +119,25 @@ const selectMenu = (index, indexPath) => {
 const getActiveIndex = () => {
   // location.pathname的值通常为：/main-angular11/app-vue2/page2，我们只取`/app-vue2/page2`
   const pathArr = location.pathname.match(/\/app-.+/);
-  activeIndex.value = pathArr ? pathArr[0].replace(/\/$/, "") : "/";
+  activeIndex = pathArr ? pathArr[0].replace(/\/$/, "") : "/";
   let hash = "";
   if (location.hash) {
     hash = location.hash.split("?")[0];
   }
   // 兼容 child-vite 和 child-react17 子应用，因为它们是hash路由
   if (
-    (activeIndex.value === "/app-vite" ||
-      activeIndex.value === "/app-react17") &&
+    (activeIndex === "/app-vite" || activeIndex === "/app-react17") &&
     hash.includes("page2")
   ) {
     this.activeIndex += hash.replace(/^#/, "");
   }
 
   // 去除斜线后缀，如：/app-vue2/ 转换为 /app-vue2
-  if (activeIndex.value !== "/") {
-    activeIndex.value = activeIndex.value.replace(/\/$/, "");
+  if (activeIndex !== "/") {
+    activeIndex = activeIndex.replace(/\/$/, "");
   }
 
-  return activeIndex.value;
+  return activeIndex;
 };
 </script>
 
