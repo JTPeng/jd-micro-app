@@ -7,7 +7,7 @@ const config = {
   react17: "http://localhost:4005",
   sidebar: "http://localhost:4006",
   "sidebar-vue3": "http://localhost:4060",
-  "multi-sidebar": "http://localhost:8081/sidebar.html",
+  "multi-sidebar": "http://localhost:8081/main-vue3/sidebar.html",
   vite: "http://localhost:4007",
   vue2: "http://localhost:4008",
   vue3: "http://localhost:4009",

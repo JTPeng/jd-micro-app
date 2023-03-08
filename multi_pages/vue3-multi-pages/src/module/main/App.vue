@@ -35,7 +35,8 @@ export default defineComponent({
             hash && (path += `/#${hash}`);
             // 主应用跳转
             console.info("path", path, appName);
-            this.$router.push(path);
+            // this.$router.push(path);
+            // window.location.href()
           } else {
             let childPath = null;
             // child-vite 和 child-react17子应用是hash路由，hash值就是它的页面地址，这里单独处理

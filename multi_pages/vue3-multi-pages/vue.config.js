@@ -1,4 +1,6 @@
 module.exports = {
+  outputDir: "main-vue3",
+  publicPath: "/main-vue3/",
   pages: {
     sidebar: {
       entry: "src/module/sidebar/main.js",

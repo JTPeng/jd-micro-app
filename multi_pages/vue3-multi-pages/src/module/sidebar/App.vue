@@ -6,7 +6,13 @@
       :default-active="activeIndex"
       @select="selectMenu"
     >
-      <el-sub-menu index="\">
+      <el-menu-item index="/">
+        <template #title>
+          <el-icon><IconMenu /></el-icon>
+          <span>首页</span>
+        </template>
+      </el-menu-item>
+      <el-sub-menu index="app-rmgs">
         <template #title>
           <el-icon><location /></el-icon>
           <span>学生管理</span>
@@ -19,6 +25,9 @@
         </el-menu-item>
         <el-menu-item index="/app-rmgs/students/returnPremium">
           <span class="menu-item-text">退费详情</span>
+        </el-menu-item>
+        <el-menu-item index="/app-rmgs/testPage">
+          <span class="menu-item-text">testPage</span>
         </el-menu-item>
       </el-sub-menu>
       <el-sub-menu index="appname-vue2">
@@ -74,12 +83,12 @@ onMounted(() => {
   getActiveIndex();
   // 监听浏览器前进后退按钮，激活对应菜单
   window.addEventListener("popstate", () => this.getActiveIndex());
-
+  console.info("onMounted", window.__MICRO_APP_ENVIRONMENT__);
   // 判断微前端环境
   if (window.__MICRO_APP_ENVIRONMENT__) {
     // 获取基座下发的数据
     microAppData = window.microApp.getData();
-
+    console.info("onMounted", microAppData);
     // 全局数据监听，监听来自其它子应用页面跳转，控制侧边栏的菜单展示
     // 因为子应用之间无法直接通信，这里采用全局数据通信
     window.microApp.addGlobalDataListener((data) => {
@@ -117,8 +126,7 @@ const getActiveIndex = () => {
   }
   // 兼容 child-vite 和 child-react17 子应用，因为它们是hash路由
   if (
-    (activeIndex === "/app-vite" ||
-      activeIndex === "/app-react17") &&
+    (activeIndex === "/app-vite" || activeIndex === "/app-react17") &&
     hash.includes("page2")
   ) {
     this.activeIndex += hash.replace(/^#/, "");
